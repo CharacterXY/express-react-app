@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import productService from '../services/productService'
 import { createProduct } from '../controllers/productController'
+import { updateProduct } from '../controllers/productController'
 
 const router = express.Router()
 
@@ -19,12 +20,27 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 })
 
-router.get('/delete/:id', async (req: Request, res: Response) => {
+router.delete('/delete/:id', async (req: Request, res: Response) => {
   const productId = +req.params.id
-  const deletedProduct = await productService.deleteProductById(productId)
-  res.send(deletedProduct)
+
+  try {
+    const deletedProduct = await productService.deleteProductById(productId)
+
+    if (deletedProduct) {
+      res.status(200).send({
+        message: `Product was deletes sucessfully with ${productId}`,
+        deletedProduct,
+      })
+    } else {
+      res.status(400).send('Product was not found')
+    }
+  } catch (error) {
+    res.status(500).send('error deleting product')
+  }
 })
 
-router.post('/', createProduct)
+router.post('', createProduct)
+
+router.put('/:id', updateProduct)
 
 export default router
