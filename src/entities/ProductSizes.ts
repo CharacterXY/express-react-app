@@ -15,19 +15,19 @@ import Size from './Size'
 @Entity('product_sizes', { schema: 'public' })
 export default class ProductSizes extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'product_id' })
-  productId: number
+  productId!: number
 
   @Column('integer', { primary: true, name: 'size_id' })
-  sizeId: number
+  sizeId!: number
 
   @Column('integer', { name: 'stock', nullable: true })
-  stock: number | null
+  stock!: number | null
 
   @ManyToOne(() => Products, (products) => products.productSizes)
   @JoinColumn([{ name: 'product_id', referencedColumnName: 'productId' }])
-  product: Products
+  product!: Products
 
   @ManyToOne(() => Size, (size) => size.productSizes)
   @JoinColumn([{ name: 'size_id', referencedColumnName: 'sizeId' }])
-  size: Size
+  size!: Size
 }

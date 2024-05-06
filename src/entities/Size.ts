@@ -14,18 +14,18 @@ import ProductSizes from './ProductSizes'
 @Entity('size', { schema: 'public' })
 export default class Size extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'size_id' })
-  sizeId: number
+  sizeId!: number
 
   @Column('character varying', {
     name: 'size_name',
     nullable: true,
     length: 50,
   })
-  sizeName: string | null
+  sizeName!: string | null
 
   @OneToMany(() => CartItems, (cartItems) => cartItems.size)
-  cartItems: CartItems[]
+  cartItems!: CartItems[]
 
   @OneToMany(() => ProductSizes, (productSizes) => productSizes.size)
-  productSizes: ProductSizes[]
+  productSizes!: ProductSizes[]
 }

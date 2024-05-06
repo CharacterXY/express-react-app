@@ -6,8 +6,13 @@
     "port": 5432,
     "username": "postgres",
     "password": "postgres",
-    "database": "",
+    "database": "web_shop",
     "synchronize": false,
-    "entities": ["entities/*.js"]
+    "entities": ["entities/*.js"],
+    "migrations": ["src/migration/**/*.ts"],
+    "cli": {
+        "entitiesDir": "src/entity",
+        "migrationsDir": "src/migration"
+    }
   }
 ]

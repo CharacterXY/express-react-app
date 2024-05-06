@@ -18,63 +18,63 @@ import Categories from './Categories'
 @Entity('products', { schema: 'public' })
 export default class Products extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'product_id' })
-  productId: number
+  productId!: number
 
   @Column('character varying', {
     name: 'product_title',
     nullable: true,
     length: 250,
   })
-  productTitle: string | null
+  productTitle!: string | null
 
   @Column('text', { name: 'product_description', nullable: true })
-  productDescription: string | null
+  productDescription!: string | null
 
   @Column('numeric', { name: 'product_rating', nullable: true })
-  productRating: string | null
+  productRating!: string | null
 
   @Column('character varying', {
     name: 'product_code',
     nullable: true,
     length: 255,
   })
-  productCode: string | null
+  productCode!: string | null
 
   @Column('integer', { name: 'product_stock', nullable: true })
-  productStock: number | null
+  productStock!: number | null
 
   @Column('character varying', {
     name: 'product_brend',
     nullable: true,
     length: 50,
   })
-  productBrend: string | null
+  productBrend!: string | null
 
   @Column('boolean', { name: 'product_isavailable', nullable: true })
-  productIsavailable: boolean | null
+  productIsavailable!: boolean | null
 
   @Column('boolean', { name: 'product_atdiscount', nullable: true })
-  productAtdiscount: boolean | null
+  productAtdiscount!: boolean | null
 
   @Column('integer', { name: 'product_discount', nullable: true })
-  productDiscount: number | null
+  productDiscount!: number | null
 
   @OneToMany(() => CartItems, (cartItems) => cartItems.product)
-  cartItems: CartItems[]
+  cartItems!: CartItems[]
 
   @OneToMany(
     () => ProductPictures,
     (productPictures) => productPictures.product,
   )
-  productPictures: ProductPictures[]
+  productPictures!: ProductPictures[]
 
   @OneToMany(() => ProductSizes, (productSizes) => productSizes.product)
-  productSizes: ProductSizes[]
+  productSizes!: ProductSizes[]
 
   @ManyToOne(() => Categories, (categories) => categories.products)
   @JoinColumn([{ name: 'category_id', referencedColumnName: 'categoryId' }])
-  category: Categories
+  category!: Categories
 
   @Column({ name: 'category_id', nullable: true, type: 'number' })
-  categoryId: number
+  categoryId!: number
 }

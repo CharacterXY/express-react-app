@@ -14,16 +14,16 @@ import Products from './Products'
 @Entity('product_pictures', { schema: 'public' })
 export default class ProductPictures extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'picture_id' })
-  pictureId: number
+  pictureId!: number
 
   @Column('character varying', {
     name: 'picture_url',
     nullable: true,
     length: 255,
   })
-  pictureUrl: string | null
+  pictureUrl!: string | null
 
   @ManyToOne(() => Products, (products) => products.productPictures)
   @JoinColumn([{ name: 'product_id', referencedColumnName: 'productId' }])
-  product: Products
+  product!: Products
 }

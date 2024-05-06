@@ -16,15 +16,15 @@ import CartItems from './CartItems'
 @Entity('cart', { schema: 'public' })
 export default class Cart extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'cart_id' })
-  cartId: number
+  cartId!: number
 
   @Column('numeric', { name: 'total', nullable: true, precision: 10, scale: 2 })
-  total: string | null
+  total!: string | null
 
   @ManyToOne(() => Users, (users) => users.carts)
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'userId' }])
-  user: Users
+  user!: Users
 
   @OneToMany(() => CartItems, (cartItems) => cartItems.cart)
-  cartItems: CartItems[]
+  cartItems!: CartItems[]
 }

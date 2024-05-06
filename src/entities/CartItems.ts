@@ -16,23 +16,23 @@ import Size from './Size'
 @Entity('cart_items', { schema: 'public' })
 export default class CartItems extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'cart_item_id' })
-  cartItemId: number
+  cartItemId!: number
 
   @Column('integer', { name: 'quantity', nullable: true })
-  quantity: number | null
+  quantity!: number | null
 
   @Column('numeric', { name: 'price', nullable: true, precision: 10, scale: 2 })
-  price: string | null
+  price!: string | null
 
   @ManyToOne(() => Cart, (cart) => cart.cartItems)
   @JoinColumn([{ name: 'cart_id', referencedColumnName: 'cartId' }])
-  cart: Cart
+  cart!: Cart
 
   @ManyToOne(() => Products, (products) => products.cartItems)
   @JoinColumn([{ name: 'product_id', referencedColumnName: 'productId' }])
-  product: Products
+  product!: Products
 
   @ManyToOne(() => Size, (size) => size.cartItems)
   @JoinColumn([{ name: 'size_id', referencedColumnName: 'sizeId' }])
-  size: Size
+  size!: Size
 }
