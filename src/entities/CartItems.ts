@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-cycle */
 import {
   BaseEntity,

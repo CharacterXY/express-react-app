@@ -41,6 +41,6 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
 
 router.post('', createProduct)
 
-router.put('/:id', updateProduct)
+router.patch('/:id', updateProduct)
 
 export default router

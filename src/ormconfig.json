@@ -11,8 +11,8 @@
     "entities": ["entities/*.js"],
     "migrations": ["src/migration/**/*.ts"],
     "cli": {
-        "entitiesDir": "src/entity",
-        "migrationsDir": "src/migration"
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration"
     }
   }
 ]

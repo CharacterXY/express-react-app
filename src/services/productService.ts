@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import Product from '../entities/Products'
-//import HttpError from '../utils/HttpError'
 
 class ProductService {
   private product: Product[] = []

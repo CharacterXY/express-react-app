@@ -1,16 +1,28 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
+/* eslint-disable prettier/prettier */
+
 import { Request, Response } from 'express'
 import productService from '../services/productService'
 import Product from '../entities/Products'
-import { merge } from 'lodash'
 
 const getAllProducts = async (req: Request, res: Response) => {
   res.send(await productService.getAllProducts())
 }
 
+// eslint-disable-next-line consistent-return
 const getProductById = async (req: Request, res: Response) => {
-  res.send(
-    await productService.getProductById(Number.parseInt(req.params.id, 10)),
-  )
+  try {
+    const product = await productService.getProductById(
+      Number.parseInt(req.params.id, 10),
+    )
+    if (!product) {
+      return res.status(404).send('Product not found')
+    }
+    res.send(product)
+  } catch (error) {
+    res.status(500).send('There was an error retriving the product')
+  }
 }
 
 const createProduct = async (req: Request, res: Response) => {
@@ -26,16 +38,22 @@ const updateProduct = async (req: Request, res: Response) => {
   const newProduct = req.body
 
   try {
-    const currentData = await productService.getProductById(productId)
-    const updatedProductData = merge({}, currentData, newProduct)
+    let productToUpdate = await productService.getProductById(productId)
 
-    if (productId && newProduct) {
-      res.send(
-        await productService.updateProduct(productId, updatedProductData),
-      )
+    if (!productToUpdate) {
+      return res.status(404).send('Product was not found')
     }
+// 
+    productToUpdate = Product.merge(productToUpdate, newProduct)
+    await productToUpdate.save()
+
+    const updatedProduct = await productService.updateProduct(
+      productId,
+      productToUpdate,
+    )
+    return res.send(updatedProduct)
   } catch (error) {
-    res.status(500).send('There was an error during modified product')
+    return res.status(500).send('There was an error during modifying product')
   }
 }
 
