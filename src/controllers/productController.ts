@@ -43,7 +43,7 @@ const updateProduct = async (req: Request, res: Response) => {
     if (!productToUpdate) {
       return res.status(404).send('Product was not found')
     }
-// 
+    //
     productToUpdate = Product.merge(productToUpdate, newProduct)
     await productToUpdate.save()
 
