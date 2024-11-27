@@ -7,51 +7,79 @@ import productService from '../services/productService'
 import Product from '../entities/Products'
 
 const getAllProducts = async (req: Request, res: Response) => {
-  res.send(await productService.getAllProducts())
+  return res.send(await productService.getAllProducts())
 }
 
 // eslint-disable-next-line consistent-return
 const getProductById = async (req: Request, res: Response) => {
   try {
-    const product = await productService.getProductById(
-      Number.parseInt(req.params.id, 10),
-    )
+    const productId = Number(req.params.id)
+    // Validacija ID-a
+    if (Number.isNaN(productId)) {
+      return res.status(400).send('Invalid product ID')
+    }
+    const product = await productService.getProductById(productId)
     if (!product) {
       return res.status(404).send('Product not found')
     }
-    res.send(product)
+    return res.status(200).send(product)
   } catch (error) {
-    res.status(500).send('There was an error retriving the product')
+    console.error('Error retrieving product by ID:', error)
+    return res.status(500).send('There was an error retrieving the product.')
   }
 }
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const newProduct = req.body as Product
-    res.send(await productService.createProduct(newProduct))
+    return res.send(await productService.createProduct(newProduct))
   } catch (error) {
-    res.status(500).send('There was an error')
+    return res.status(500).send('There was an error')
   }
 }
+
+const createMultipleProducts = async (req: Request, res: Response) => {
+  try {
+    const products = req.body
+    console.log('Request body:', req.body)
+
+    if (!Array.isArray(products)) {
+      return res
+        .status(400)
+        .send('Invalid body format. It should be an array of products.')
+    }
+
+    products.forEach((product, index) => {
+      console.log(`Product ${index}:`, product)
+    })
+
+    // Poziva servis za obradu logike
+    const createdProducts =
+      await productService.createMultipleProducts(products)
+
+    return res.status(201).send(createdProducts)
+  } catch (error) {
+    console.error('Error in createMultipleProducts:', error)
+    return res
+      .status(500)
+      .send({ message: 'There was an error creating products.' })
+  }
+}
+
 const updateProduct = async (req: Request, res: Response) => {
   const productId = +req.params.id
   const newProduct = req.body
-
   try {
-    let productToUpdate = await productService.getProductById(productId)
-
+    const productToUpdate = await productService.getProductById(productId)
     if (!productToUpdate) {
       return res.status(404).send('Product was not found')
     }
-    //
-    productToUpdate = Product.merge(productToUpdate, newProduct)
-    await productToUpdate.save()
-
+    // Azuriranje proizvoda pozivom servisa
     const updatedProduct = await productService.updateProduct(
       productId,
-      productToUpdate,
+      newProduct,
     )
-    return res.send(updatedProduct)
+    return res.status(200).send(updatedProduct)
   } catch (error) {
     return res.status(500).send('There was an error during modifying product')
   }
@@ -69,4 +97,5 @@ export {
   createProduct,
   deleteProductById,
   updateProduct,
+  createMultipleProducts,
 }

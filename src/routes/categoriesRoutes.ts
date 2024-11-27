@@ -1,5 +1,4 @@
-import express, { Request, Response } from 'express'
-import categoriesServices from '../services/categoriesServices'
+import express from 'express'
 import {
   getAllCategories,
   getCategoryById,

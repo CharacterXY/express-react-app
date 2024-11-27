@@ -18,13 +18,20 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    // Add your ESLint rules here
+    "@typescript-eslint/no-explicit-any": "warn", // Ostavlja prostor za any kada je potrebno
+    "@typescript-eslint/explicit-module-boundary-types": "off", // Ne zahtijeva da svaki modul ima definirane tipove
+    "@typescript-eslint/no-inferrable-types": "off", // Dopušta eksplicitne tipove
+    "prettier/prettier": ["error", { "endOfLine": "auto" }], // Rješava konflikte s Prettierom
+    "no-console": "off" // Dopušta console.log
   },
+
   "overrides": [
     {
       "files": ["*.ts"],
       "rules": {
-        // Add any TypeScript-specific rules here
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]

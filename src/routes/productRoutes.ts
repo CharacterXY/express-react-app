@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express'
 import productService from '../services/productService'
-import { createProduct } from '../controllers/productController'
-import { updateProduct } from '../controllers/productController'
+import {
+  createProduct,
+  updateProduct,
+  createMultipleProducts,
+} from '../controllers/productController'
 
 const router = express.Router()
 
@@ -39,8 +42,29 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
   }
 })
 
-router.post('', createProduct)
+router.post('', async (req, res, next) => {
+  try {
+    await createProduct(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 
-router.patch('/:id', updateProduct)
+router.post('/bulk', async (req, res, next) => {
+  console.log('Bulk POST route hit')
+  console.log('Request body:', req.body)
+  try {
+    await createMultipleProducts(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 
+router.patch('/:id', async (req, res, next) => {
+  try {
+    await updateProduct(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 export default router

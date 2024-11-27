@@ -8,6 +8,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm'
 import Products from './Products'
 
@@ -24,7 +25,13 @@ export default class ProductPictures extends BaseEntity {
   })
   pictureUrl!: string | null
 
-  @ManyToOne(() => Products, (products) => products.productPictures)
+  @ManyToOne(() => Products, (products) => products.productPictures, {
+    nullable: false,
+  })
   @JoinColumn([{ name: 'product_id', referencedColumnName: 'productId' }])
   product!: Products
+
+  // This we need for productsPictureService for fetching pictures by product ID
+  @RelationId((productPictures: ProductPictures) => productPictures.product)
+  productId!: number
 }

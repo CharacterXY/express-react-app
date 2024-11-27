@@ -1,7 +1,6 @@
 // src/index.js
 import express, { Express } from 'express'
 import 'reflect-metadata'
-import cors from 'cors'
 
 import dataSource from './app-data-source'
 import homeRoutes from './routes/homeRoutes'
@@ -26,7 +25,6 @@ const port = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(errorHandler)
-app.use(cors())
 app.use(express.static('public'))
 
 app.use('/', homeRoutes)
