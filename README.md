@@ -26,12 +26,23 @@ This Node.js application serves as a basic template for starting a new project. 
    npm install
    ```
 
+### Migration
+
+example of migration npm run typeorm migration:generate -- ./src/migrations/AddProductPriceToProducts -d ./src/app-data-source.ts
+
+####
+
+```
+
 ### Development Run:
+
 
 To start the application in development mode, run the following command:
 
 ```
+
 npm run dev
+
 ```
 
 This command will start the server using nodemon, which automatically restarts the server when file changes are detected. It's convenient for development as it provides real-time feedback on code changes.
@@ -41,3 +52,4 @@ This command will start the server using nodemon, which automatically restarts t
 - After starting the server in development mode, you can access the application through your preferred web browser or make API requests using tools like Postman.
 - Modify and add endpoints in the `index.js` file to tailor the application according to your requirements.
 - Utilize additional npm packages and middleware as needed to extend the functionality of your application.
+```

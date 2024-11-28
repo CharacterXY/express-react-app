@@ -10,7 +10,7 @@ import {
 
 const router = express.Router()
 
-/* router.get('', getAllPictures) */
+/* router.get('/', getAllPictures) */
 
 router.get('/:productId', getPicturesByProductId)
 router.post('/', saveProductPicture)

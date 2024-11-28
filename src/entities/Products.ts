@@ -1,6 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/no-cycle */
-import { IsNotEmpty, IsNumber, IsOptional, IsBoolean } from 'class-validator'
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+  IsString,
+} from 'class-validator'
 import {
   BaseEntity,
   Column,
@@ -28,6 +34,20 @@ export default class Products extends BaseEntity {
     nullable: true,
     length: 250,
   })
+  @Column('numeric', { name: 'product_price', nullable: true })
+  @IsNumber({}, { message: 'Product price must be a number' })
+  @IsOptional()
+  productPrice!: number | null
+
+  @Column('character varying', {
+    name: 'product_model',
+    nullable: true,
+    length: 255,
+  })
+  @IsOptional()
+  @IsString({ message: 'Product model must be a string' })
+  productModel!: string | null
+
   @IsNotEmpty({ message: 'Product title is required' })
   productTitle!: string | null
 

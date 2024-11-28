@@ -4,6 +4,8 @@ import {
   createProduct,
   updateProduct,
   createMultipleProducts,
+  countAllProducts,
+  getProductsWithPagination,
 } from '../controllers/productController'
 
 const router = express.Router()
@@ -12,6 +14,9 @@ router.get('', async (req: Request, res: Response) => {
   const product = await productService.getAllProducts()
   res.send(product)
 })
+router.get('/count', countAllProducts)
+
+router.get('/pagination', getProductsWithPagination)
 
 router.get('/:id', async (req: Request, res: Response) => {
   const productId = +req.params.id

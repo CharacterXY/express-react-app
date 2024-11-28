@@ -6,11 +6,30 @@ class ProductService {
   private product: Product[] = []
 
   // Stavlja se promise jer on obecava da ce se nesto vratiti i u njegov controller vracamo vrijednosti koje onda moramo awaitati
-  getAllProducts(): Promise<Product[]> {
-    return Product.find()
+  async getAllProducts(): Promise<Product[]> {
+    return Product.find({
+      relations: ['productPictures', 'category'],
+    })
   }
 
-  getProductById(id: number): Promise<Product | null> {
+  async countAllProducts(): Promise<number> {
+    return Product.count({})
+  }
+
+  async getProductsWithPagination(
+    page: number,
+    limit: number,
+  ): Promise<Product[]> {
+    const offset = (page - 1) * limit
+    console.log('Page:', page, 'Limit:', limit, 'Offset:', offset)
+    return Product.find({
+      skip: offset,
+      take: limit || 6,
+      relations: ['productPictures', 'category'],
+    })
+  }
+
+  async getProductById(id: number): Promise<Product | null> {
     return Product.findOneBy({ productId: id })
   }
 

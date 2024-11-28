@@ -10,6 +10,30 @@ const getAllProducts = async (req: Request, res: Response) => {
   return res.send(await productService.getAllProducts())
 }
 
+const countAllProducts = async (req: Request, res: Response) => {
+  try {
+    const total = await productService.countAllProducts()
+    res.status(200).json({ total })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to count products.' })
+  }
+}
+
+const getProductsWithPagination = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 6
+    const products = await productService.getProductsWithPagination(page, limit)
+    res.status(200).send(products)
+  } catch (error) {
+    console.error('Error in pagination controller:', error)
+    res.status(500).send('Error retrieving products with pagination')
+  }
+}
+
 // eslint-disable-next-line consistent-return
 const getProductById = async (req: Request, res: Response) => {
   try {
@@ -98,4 +122,6 @@ export {
   deleteProductById,
   updateProduct,
   createMultipleProducts,
+  countAllProducts,
+  getProductsWithPagination,
 }

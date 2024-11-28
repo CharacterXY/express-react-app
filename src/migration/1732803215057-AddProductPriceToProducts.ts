@@ -1,0 +1,128 @@
+import { MigrationInterface, QueryRunner } from "typeorm";
+
+export class AddProductPriceToProducts1732803215057 implements MigrationInterface {
+    name = 'AddProductPriceToProducts1732803215057'
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE "product_sizes" DROP CONSTRAINT "FK_b6d94a689dd115cdf01589b9615"`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" DROP CONSTRAINT "FK_b77c486737027396bcfdc0897bf"`);
+        await queryRunner.query(`ALTER TABLE "cart_items" DROP CONSTRAINT "FK_30e89257a105eab7648a35c7fce"`);
+        await queryRunner.query(`ALTER TABLE "cart_items" DROP CONSTRAINT "FK_17f9c2d96a6fbdc6274c9cc487a"`);
+        await queryRunner.query(`ALTER TABLE "cart_items" DROP CONSTRAINT "FK_6385a745d9e12a89b859bb25623"`);
+        await queryRunner.query(`ALTER TABLE "product_pictures" DROP CONSTRAINT "FK_f07e63921c0d66f9ecd3a73868f"`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" DROP COLUMN "product_size_id"`);
+        await queryRunner.query(`ALTER TABLE "products" DROP COLUMN "product_title"`);
+        await queryRunner.query(`ALTER TABLE "products" ADD "product_price" numeric`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ADD CONSTRAINT "PK_26029cac3066448d95b0df3fda0" PRIMARY KEY ("product_id", "size_id")`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_firstName" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_lastName" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_password" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" DROP COLUMN "user_createdAt"`);
+        await queryRunner.query(`ALTER TABLE "users" ADD "user_createdAt" TIMESTAMP WITH TIME ZONE`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_isActive" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_email" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_role" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_role" SET DEFAULT 'user'`);
+        await queryRunner.query(`ALTER TABLE "cart" ALTER COLUMN "total" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart" ALTER COLUMN "user_id" DROP NOT NULL`);
+        await queryRunner.query(`CREATE SEQUENCE IF NOT EXISTS "product_sizes_product_id_seq" OWNED BY "product_sizes"."product_id"`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ALTER COLUMN "product_id" SET DEFAULT nextval('"product_sizes_product_id_seq"')`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ALTER COLUMN "stock" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "size" ALTER COLUMN "size_name" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "quantity" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "price" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "cart_id" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "product_id" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "size_id" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "categories" ALTER COLUMN "category_name" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_description" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_rating" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" DROP COLUMN "product_code"`);
+        await queryRunner.query(`ALTER TABLE "products" ADD "product_code" character varying(255)`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_stock" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_brend" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_isavailable" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_atdiscount" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_discount" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "category_id" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "product_pictures" ALTER COLUMN "picture_url" DROP NOT NULL`);
+        await queryRunner.query(`CREATE UNIQUE INDEX "users_pkey" ON "users" ("user_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "cart_pkey" ON "cart" ("cart_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "product_sizes_pkey" ON "product_sizes" ("product_id", "size_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "size_pkey" ON "size" ("size_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "cart_items_pkey" ON "cart_items" ("cart_item_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "categories_pkey" ON "categories" ("category_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "products_pkey" ON "products" ("product_id") `);
+        await queryRunner.query(`CREATE UNIQUE INDEX "product_pictures_pkey" ON "product_pictures" ("picture_id") `);
+        await queryRunner.query(`ALTER TABLE "cart" ADD CONSTRAINT "FK_f091e86a234693a49084b4c2c86" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ADD CONSTRAINT "FK_b6d94a689dd115cdf01589b9615" FOREIGN KEY ("product_id") REFERENCES "products"("product_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ADD CONSTRAINT "FK_b77c486737027396bcfdc0897bf" FOREIGN KEY ("size_id") REFERENCES "size"("size_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ADD CONSTRAINT "FK_6385a745d9e12a89b859bb25623" FOREIGN KEY ("cart_id") REFERENCES "cart"("cart_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ADD CONSTRAINT "FK_30e89257a105eab7648a35c7fce" FOREIGN KEY ("product_id") REFERENCES "products"("product_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ADD CONSTRAINT "FK_17f9c2d96a6fbdc6274c9cc487a" FOREIGN KEY ("size_id") REFERENCES "size"("size_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "products" ADD CONSTRAINT "FK_9a5f6868c96e0069e699f33e124" FOREIGN KEY ("category_id") REFERENCES "categories"("category_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "product_pictures" ADD CONSTRAINT "FK_f07e63921c0d66f9ecd3a73868f" FOREIGN KEY ("product_id") REFERENCES "products"("product_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE "product_pictures" DROP CONSTRAINT "FK_f07e63921c0d66f9ecd3a73868f"`);
+        await queryRunner.query(`ALTER TABLE "products" DROP CONSTRAINT "FK_9a5f6868c96e0069e699f33e124"`);
+        await queryRunner.query(`ALTER TABLE "cart_items" DROP CONSTRAINT "FK_17f9c2d96a6fbdc6274c9cc487a"`);
+        await queryRunner.query(`ALTER TABLE "cart_items" DROP CONSTRAINT "FK_30e89257a105eab7648a35c7fce"`);
+        await queryRunner.query(`ALTER TABLE "cart_items" DROP CONSTRAINT "FK_6385a745d9e12a89b859bb25623"`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" DROP CONSTRAINT "FK_b77c486737027396bcfdc0897bf"`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" DROP CONSTRAINT "FK_b6d94a689dd115cdf01589b9615"`);
+        await queryRunner.query(`ALTER TABLE "cart" DROP CONSTRAINT "FK_f091e86a234693a49084b4c2c86"`);
+        await queryRunner.query(`DROP INDEX "public"."product_pictures_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."products_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."categories_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."cart_items_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."size_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."product_sizes_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."cart_pkey"`);
+        await queryRunner.query(`DROP INDEX "public"."users_pkey"`);
+        await queryRunner.query(`ALTER TABLE "product_pictures" ALTER COLUMN "picture_url" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "category_id" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_discount" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_atdiscount" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_isavailable" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_brend" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_stock" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" DROP COLUMN "product_code"`);
+        await queryRunner.query(`ALTER TABLE "products" ADD "product_code" character varying(50) NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_rating" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "products" ALTER COLUMN "product_description" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "categories" ALTER COLUMN "category_name" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "size_id" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "product_id" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "cart_id" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "price" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ALTER COLUMN "quantity" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "size" ALTER COLUMN "size_name" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ALTER COLUMN "stock" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ALTER COLUMN "product_id" DROP DEFAULT`);
+        await queryRunner.query(`DROP SEQUENCE "product_sizes_product_id_seq"`);
+        await queryRunner.query(`ALTER TABLE "cart" ALTER COLUMN "user_id" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "cart" ALTER COLUMN "total" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_role" DROP DEFAULT`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_role" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_email" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_isActive" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" DROP COLUMN "user_createdAt"`);
+        await queryRunner.query(`ALTER TABLE "users" ADD "user_createdAt" TIMESTAMP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_password" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_lastName" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ALTER COLUMN "user_firstName" SET NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" DROP CONSTRAINT "PK_26029cac3066448d95b0df3fda0"`);
+        await queryRunner.query(`ALTER TABLE "products" DROP COLUMN "product_price"`);
+        await queryRunner.query(`ALTER TABLE "products" ADD "product_title" character varying(250) NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ADD "product_size_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "product_pictures" ADD CONSTRAINT "FK_f07e63921c0d66f9ecd3a73868f" FOREIGN KEY ("product_id") REFERENCES "products"("product_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ADD CONSTRAINT "FK_6385a745d9e12a89b859bb25623" FOREIGN KEY ("cart_id") REFERENCES "cart"("cart_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ADD CONSTRAINT "FK_17f9c2d96a6fbdc6274c9cc487a" FOREIGN KEY ("size_id") REFERENCES "size"("size_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "cart_items" ADD CONSTRAINT "FK_30e89257a105eab7648a35c7fce" FOREIGN KEY ("product_id") REFERENCES "products"("product_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ADD CONSTRAINT "FK_b77c486737027396bcfdc0897bf" FOREIGN KEY ("size_id") REFERENCES "size"("size_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "product_sizes" ADD CONSTRAINT "FK_b6d94a689dd115cdf01589b9615" FOREIGN KEY ("product_id") REFERENCES "products"("product_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+    }
+
+}
