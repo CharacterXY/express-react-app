@@ -112,4 +112,7 @@ export default class Products extends BaseEntity {
 
   @RelationId((product: Products) => product.category)
   categoryId!: number
+
+  @RelationId((product: Products) => product.productSizes)
+  productSizesIds!: number[]
 }

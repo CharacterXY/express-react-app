@@ -8,6 +8,8 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  PrimaryColumn,
+  RelationId,
 } from 'typeorm'
 import Products from './Products'
 import Size from './Size'
@@ -15,14 +17,14 @@ import Size from './Size'
 @Index('product_sizes_pkey', ['productId', 'sizeId'], { unique: true })
 @Entity('product_sizes', { schema: 'public' })
 export default class ProductSizes extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'integer', name: 'product_id' })
+  @PrimaryColumn({ type: 'integer', name: 'product_id' })
   productId!: number
 
   @Column('integer', { primary: true, name: 'size_id' })
   sizeId!: number
 
-  @Column('integer', { name: 'stock', nullable: true })
-  stock!: number | null
+  @Column('integer', { name: 'stock' })
+  stock!: number
 
   @ManyToOne(() => Products, (products) => products.productSizes)
   @JoinColumn([{ name: 'product_id', referencedColumnName: 'productId' }])

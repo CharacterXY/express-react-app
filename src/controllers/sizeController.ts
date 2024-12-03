@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import sizeService from '../services/sizeService'
+import productSizeServices from '../services/productSizeService'
 import Size from '../entities/Size'
 
 const getAllSizes = async (req: Request, res: Response) => {
